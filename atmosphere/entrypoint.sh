@@ -1,19 +1,13 @@
 #!/bin/bash
 MANAGE_CMD="/opt/env/atmo/bin/python /opt/dev/atmosphere/manage.py"
 
-# Clone secrets repo
-mkdir ~/.ssh
-echo -e $SSH_KEY > /opt/my_key
-chmod 600 /opt/my_key
-echo -e "Host gitlab.cyverse.org\n\tStrictHostKeyChecking no\n\tIdentityFile /opt/my_key" >> ~/.ssh/config
-git clone $SECRETS_REPO $SECRETS_DIR
-
 # Setup Atmosphere
 source /opt/env/atmo/bin/activate && \
 pip install -r /opt/dev/atmosphere/requirements.txt
 mv /opt/web_shell_no_gateone.yml /opt/dev/atmosphere-ansible/ansible/playbooks/instance_deploy/41_shell_access.yml
 
 # Setup SSH keys
+export SECRETS_DIR=/opt/dev/atmosphere-docker-secrets
 . $SECRETS_DIR/atmo_vars.env
 mkdir /opt/dev/atmosphere/extras/ssh
 cp $SSH_PRIV_KEY /opt/dev/atmosphere/extras/ssh/id_rsa

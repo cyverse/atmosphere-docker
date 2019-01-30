@@ -18,10 +18,10 @@ services:
     volumes:
       - '../atmosphere:/opt/dev/atmosphere'
       - '../atmosphere-ansible:/opt/dev/atmosphere-ansible'
+      - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
       - 'guacamole-keys:/etc/guacamole/keys:rw'
       - './logs/celery:/var/log/celery:rw'
       - './logs/atmosphere:/opt/dev/atmosphere/logs:rw'
-    env_file: 'secrets.env'
     depends_on:
       - 'postgres'
 
@@ -30,8 +30,8 @@ services:
       context: './troposphere'
     volumes:
       - '../troposphere:/opt/dev/troposphere'
+      - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
       - './logs/troposphere:/opt/dev/troposphere/logs:rw'
-    env_file: 'secrets.env'
     depends_on:
       - 'atmosphere'
     ports:

@@ -1,5 +1,4 @@
 # Atmosphere-Docker
-
 Entire Atmosphere development environment in Docker Containers using Docker-Compose.
 
 **Please note that this is a work in progress. It currently works to deploy a local Atmosphere setup, but more work is required to harness the full potential of Docker Compose. Create issues for any problems or feature requests.**
@@ -12,9 +11,13 @@ Entire Atmosphere development environment in Docker Containers using Docker-Comp
     - Alternatively, modify the docker-compose file to point to your local repositories
 2. `docker-compose build` to build all containers. This step will take a while the first time it is run, but will be quicker after that
     - To populate with an existing database, copy the `.sql` file to the `postgres` directory before building
-3. Copy `secrets.env.example` to `secrets.env` and fill it out with the `atmosphere-docker-secrets` repository link and an SSH private key that has access to this repository
-    - You can get your private key in the correct format with this command: `cat ~/.ssh/id_rsa | awk 'ORS="\\n"'`
+3. Clone the `atmosphere-docker-secrets` repository in the same directory as this repository (not inside this repository directory)
 4. `docker-compose up` to start all containers (use the `-d` option to start containers in the background)
+
+
+Troposphere changes will be automatically built whenever they are made.
+
+Atmosphere may have to restart to have all changes (`docker-compose restart atmosphere`).
 
 
 ### Tips

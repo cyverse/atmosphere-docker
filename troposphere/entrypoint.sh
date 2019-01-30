@@ -1,15 +1,11 @@
 #!/bin/bash
 
-echo -e $SSH_KEY > /opt/my_key
-chmod 600 /opt/my_key
-echo -e "Host gitlab.cyverse.org\n\tStrictHostKeyChecking no\n\tIdentityFile /opt/my_key" >> ~/.ssh/config
-git clone $SECRETS_REPO $SECRETS_DIR
-
 # Setup Troposphere
 source /opt/env/troposphere/bin/activate && \
 pip install -r /opt/dev/troposphere/requirements.txt
 chmod o+rw /opt/dev/troposphere/logs
 
+export SECRETS_DIR=/opt/dev/atmosphere-docker-secrets
 cp $SECRETS_DIR/inis/troposphere.ini /opt/dev/troposphere/variables.ini
 /opt/env/troposphere/bin/python /opt/dev/troposphere/configure
 
@@ -23,13 +19,9 @@ sed -i "s/^    url = .+$/    url = data.get('token_url').replace('guacamole','lo
 
 # Configure and run nginx
 . $SECRETS_DIR/tropo_vars.env
-echo "cp $TLS_BYO_PRIVKEY_DIR /etc/ssl/private/localhost.key"
 cp $TLS_BYO_PRIVKEY_DIR /etc/ssl/private/localhost.key
-echo "cp $TLS_BYO_CERT_DIR /etc/ssl/certs/localhost.crt"
 cp $TLS_BYO_CERT_DIR /etc/ssl/certs/localhost.crt
-echo "cp $TLS_BYO_CACHAIN_DIR /etc/ssl/certs/localhost.cachain.crt"
 cp $TLS_BYO_CACHAIN_DIR /etc/ssl/certs/localhost.cachain.crt
-echo "cat /etc/ssl/certs/localhost.crt /etc/ssl/certs/localhost.cachain.crt > /etc/ssl/certs/localhost.fullchain.crt"
 cat /etc/ssl/certs/localhost.crt /etc/ssl/certs/localhost.cachain.crt > /etc/ssl/certs/localhost.fullchain.crt
 nginx
 
