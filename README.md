@@ -1,4 +1,4 @@
-# Atmosphere-Docker
+# Atmosphere-Docker-Dev
 Entire Atmosphere development environment in Docker Containers using Docker-Compose.
 
 **Please note that this is a work in progress. It currently works to deploy a local Atmosphere setup, but more work is required to harness the full potential of Docker Compose. Create issues for any problems or feature requests.**
