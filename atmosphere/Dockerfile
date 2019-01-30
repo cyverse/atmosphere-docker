@@ -42,25 +42,11 @@ RUN mkdir -p /run/uwsgi/app/atmosphere /var/log/uwsgi && \
     chown -R www-data:www-data /run/uwsgi/app/ /var/log/uwsgi && \
     touch /var/log/uwsgi/atmosphere.log
 
-# Import args before cloning branches
-ARG ATMO_REPO
-ARG ATMO_BRANCH
-ARG ANSIBLE_REPO
-ARG ANSIBLE_BRANCH
-
 # Clone repos and pip install requirements
 RUN mkdir /opt/env && \
     pip install --upgrade pip==9.0.3 virtualenv &&\
     virtualenv /opt/env/atmosphere &&\
     ln -s /opt/env/atmosphere/ /opt/env/atmo
-RUN git clone -b $ATMO_BRANCH https://github.com/$ATMO_REPO/atmosphere.git /opt/dev/atmosphere && \
-    git clone -b $ANSIBLE_BRANCH https://github.com/$ANSIBLE_REPO/atmosphere-ansible.git /opt/dev/atmosphere-ansible && \
-    source /opt/env/atmo/bin/activate && \
-    pip install -r /opt/dev/atmosphere/requirements.txt
-
-# Set permissions on atmosphere
-RUN chown -R www-data:www-data /opt/dev/atmosphere && \
-    chmod g+rw /opt/dev/atmosphere
 
 # Install initd files
 COPY flower.initd /etc/init.d/flower
@@ -78,7 +64,7 @@ RUN apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
 # Prepare entrypoint
-COPY web_shell_no_gateone.yml /opt/dev/atmosphere-ansible/ansible/playbooks/instance_deploy/41_shell_access.yml
+COPY web_shell_no_gateone.yml /opt/web_shell_no_gateone.yml
 COPY entrypoint.sh /root/entrypoint.sh
 RUN chmod +x /root/entrypoint.sh
 ENTRYPOINT ["/root/entrypoint.sh"]

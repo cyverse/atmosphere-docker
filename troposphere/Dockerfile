@@ -49,21 +49,10 @@ RUN mkdir -p /run/uwsgi/app/troposphere /var/log/uwsgi && \
     chown -R www-data:www-data /run/uwsgi/app/ /var/log/uwsgi && \
     touch /var/log/uwsgi/troposphere.log
 
-# Import args before cloning branch
-ARG TROPO_REPO
-ARG TROPO_BRANCH
-
 # Clone repos and pip install requirements
 RUN pip install --upgrade pip==9.0.3 virtualenv && \
     mkdir /opt/env && \
     virtualenv /opt/env/troposphere
-RUN git clone -b $TROPO_BRANCH https://github.com/$TROPO_REPO/troposphere.git /opt/dev/troposphere && \
-    source /opt/env/troposphere/bin/activate && \
-    pip install -r /opt/dev/troposphere/requirements.txt
-
-# Set permissions on troposphere
-RUN chown -R www-data:www-data /opt/dev/troposphere && \
-    chmod g+rw /opt/dev/troposphere
 
 # Setup uwsgi
 RUN mkdir -p /etc/uwsgi/apps-available /etc/uwsgi/apps-enabled

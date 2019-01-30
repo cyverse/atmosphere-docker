@@ -15,12 +15,9 @@ services:
   atmosphere:
     build:
       context: './atmosphere'
-      args:
-        ATMO_REPO: 'cyverse'
-        ATMO_BRANCH: 'master'
-        ANSIBLE_REPO: 'cyverse'
-        ANSIBLE_BRANCH: 'master'
     volumes:
+      - '../atmosphere:/opt/dev/atmosphere'
+      - '../atmosphere-ansible:/opt/dev/atmosphere-ansible'
       - 'guacamole-keys:/etc/guacamole/keys:rw'
       - './logs/celery:/var/log/celery:rw'
       - './logs/atmosphere:/opt/dev/atmosphere/logs:rw'
@@ -31,10 +28,8 @@ services:
   troposphere:
     build:
       context: './troposphere'
-      args:
-        TROPO_REPO: 'cyverse'
-        TROPO_BRANCH: 'master'
     volumes:
+      - '../troposphere:/opt/dev/troposphere'
       - './logs/troposphere:/opt/dev/troposphere/logs:rw'
     env_file: 'secrets.env'
     depends_on:

@@ -5,6 +5,11 @@ chmod 600 /opt/my_key
 echo -e "Host gitlab.cyverse.org\n\tStrictHostKeyChecking no\n\tIdentityFile /opt/my_key" >> ~/.ssh/config
 git clone $SECRETS_REPO $SECRETS_DIR
 
+# Setup Troposphere
+source /opt/env/troposphere/bin/activate && \
+pip install -r /opt/dev/troposphere/requirements.txt
+chmod o+rw /opt/dev/troposphere/logs
+
 cp $SECRETS_DIR/inis/troposphere.ini /opt/dev/troposphere/variables.ini
 /opt/env/troposphere/bin/python /opt/dev/troposphere/configure
 
@@ -40,4 +45,5 @@ cd /opt/dev/troposphere
 npm install --unsafe-perm
 npm run build --production
 
-sudo su -l www-data -s /bin/bash -c "UWSGI_DEB_CONFNAMESPACE=app UWSGI_DEB_CONFNAME=troposphere /opt/env/troposphere/bin/uwsgi --ini /usr/share/uwsgi/conf/default.ini --ini /etc/uwsgi/apps-enabled/troposphere.ini"
+sudo su -l www-data -s /bin/bash -c "UWSGI_DEB_CONFNAMESPACE=app UWSGI_DEB_CONFNAME=troposphere /opt/env/troposphere/bin/uwsgi --daemonize2 /opt/dev/troposphere/logs/uwsgi.log --ini /usr/share/uwsgi/conf/default.ini --ini /etc/uwsgi/apps-enabled/troposphere.ini"
+npm run serve -- --public localhost

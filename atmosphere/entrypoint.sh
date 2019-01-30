@@ -8,6 +8,11 @@ chmod 600 /opt/my_key
 echo -e "Host gitlab.cyverse.org\n\tStrictHostKeyChecking no\n\tIdentityFile /opt/my_key" >> ~/.ssh/config
 git clone $SECRETS_REPO $SECRETS_DIR
 
+# Setup Atmosphere
+source /opt/env/atmo/bin/activate && \
+pip install -r /opt/dev/atmosphere/requirements.txt
+mv /opt/web_shell_no_gateone.yml /opt/dev/atmosphere-ansible/ansible/playbooks/instance_deploy/41_shell_access.yml
+
 # Setup SSH keys
 . $SECRETS_DIR/atmo_vars.env
 mkdir /opt/dev/atmosphere/extras/ssh
