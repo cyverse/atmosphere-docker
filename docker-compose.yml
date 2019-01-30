@@ -1,0 +1,61 @@
+---
+version: '3'
+
+services:
+
+  postgres:
+    build:
+      context: './postgres'
+    environment:
+      POSTGRES_USER: 'atmo_app'
+      POSTGRES_PASSWORD: 'atmosphere'
+      POSTGRES_DB: 'atmo_prod'
+      TROPO_DB_NAME: 'troposphere'
+
+  atmosphere:
+    build:
+      context: './atmosphere'
+      args:
+        ATMO_REPO: 'cyverse'
+        ATMO_BRANCH: 'master'
+        ANSIBLE_REPO: 'cyverse'
+        ANSIBLE_BRANCH: 'master'
+    volumes:
+      - 'guacamole-keys:/etc/guacamole/keys:rw'
+      - './logs/celery:/var/log/celery:rw'
+      - './logs/atmosphere:/opt/dev/atmosphere/logs:rw'
+    env_file: 'secrets.env'
+    depends_on:
+      - 'postgres'
+
+  troposphere:
+    build:
+      context: './troposphere'
+      args:
+        TROPO_REPO: 'cyverse'
+        TROPO_BRANCH: 'master'
+    volumes:
+      - './logs/troposphere:/opt/dev/troposphere/logs:rw'
+    env_file: 'secrets.env'
+    depends_on:
+      - 'atmosphere'
+    ports:
+      - '443:443'
+      - '80:80'
+
+  guacamole:
+    image: 'guacamole/guacamole:0.9.14'
+    environment:
+      GUACAMOLE_HOME: '/guac_stuff'
+      GUACD_HOSTNAME: 'guacd'
+    volumes:
+      - './guacamole:/guac_stuff:rw'
+      - 'guacamole-keys:/guac_stuff/keys:rw'
+    ports:
+      - '8080:8080'
+
+  guacd:
+    image: 'guacamole/guacd:0.9.14'
+
+volumes:
+  guacamole-keys:
