@@ -67,4 +67,6 @@ RUN apt-get autoremove -y && \
 COPY web_shell_no_gateone.yml /opt/web_shell_no_gateone.yml
 COPY entrypoint.sh /root/entrypoint.sh
 RUN chmod +x /root/entrypoint.sh
+WORKDIR /opt/dev/atmosphere
+RUN echo "source /opt/env/atmo/bin/activate" >> /root/.bashrc
 ENTRYPOINT ["/root/entrypoint.sh"]

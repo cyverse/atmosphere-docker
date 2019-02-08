@@ -72,4 +72,6 @@ RUN ln -s /etc/nginx/sites-available/site.conf /etc/nginx/sites-enabled/site.con
 # Prepare entrypoint
 COPY entrypoint.sh /root/entrypoint.sh
 RUN chmod +x /root/entrypoint.sh
+WORKDIR /opt/dev/troposphere
+RUN echo "source /opt/env/troposphere/bin/activate" >> /root/.bashrc
 ENTRYPOINT ["/root/entrypoint.sh"]

@@ -19,8 +19,8 @@ cp $ANSIBLE_HOSTS_FILE /opt/dev/atmosphere-ansible/ansible/hosts
 cp -r $ANSIBLE_GROUP_VARS_FOLDER /opt/dev/atmosphere-ansible/ansible/group_vars
 
 # Copy ini files
-cp $SECRETS_DIR/inis/atmosphere.ini /opt/dev/atmosphere/variables.ini
-cp $SECRETS_DIR/inis/atmosphere-ansible.ini /opt/dev/atmosphere-ansible/variables.ini
+ln -s $SECRETS_DIR/inis/atmosphere.ini /opt/dev/atmosphere/variables.ini
+ln -s $SECRETS_DIR/inis/atmosphere-ansible.ini /opt/dev/atmosphere-ansible/variables.ini
 /opt/env/atmo/bin/python /opt/dev/atmosphere/configure
 /opt/env/atmo/bin/python /opt/dev/atmosphere-ansible/configure
 
