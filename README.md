@@ -9,10 +9,16 @@ Entire Atmosphere development environment in Docker Containers using Docker-Comp
 ## Getting started
 1. Clone this repository in the same directory as [Troposphere](https://github.com/cyverse/troposphere), [Atmosphere](https://github.com/cyverse/atmosphere), and [Atmosphere Ansible](https://github.com/cyverse/atmosphere-ansible) repositories (**these must be present for this to work properly**)
     - Alternatively, modify the docker-compose file to point to your local repositories with either relative or absolute paths
+
+
 2. `docker-compose build` to build all containers. This step will take a while the first time it is run, but will be quicker after that
     - To populate with an existing database, copy the `.sql` file to the `postgres` directory before building
+
+
 3. Clone the `atmosphere-docker-secrets` repository in the same directory as this repository (not inside this repository directory)
     - Change `MOCK_USER` variable in `atmosphere.ini` and `troposphere.ini` to your username
+
+    
 4. `docker-compose up` to start all containers (use the `-d` option to start containers in the background)
     - Your containers should be ready when you see `webpack: Compiled successfully.` from Troposphere
     - Access Atmosphere in your browser at `localhost`
