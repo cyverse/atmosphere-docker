@@ -56,7 +56,7 @@ RUN chmod -R 755 /etc/init.d
 
 # Setup uwsgi
 RUN mkdir -p /etc/uwsgi/apps-available /etc/uwsgi/apps-enabled
-COPY atmosphere.ini /etc/uwsgi/apps-available/
+COPY uwsgi.ini /etc/uwsgi/apps-available/atmosphere.ini
 RUN ln -s /etc/uwsgi/apps-available/atmosphere.ini /etc/uwsgi/apps-enabled/atmosphere.ini
 
 # Cleanup

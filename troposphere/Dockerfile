@@ -56,7 +56,7 @@ RUN pip install --upgrade pip==9.0.3 virtualenv && \
 
 # Setup uwsgi
 RUN mkdir -p /etc/uwsgi/apps-available /etc/uwsgi/apps-enabled
-COPY troposphere.ini /etc/uwsgi/apps-available/
+COPY uwsgi.ini /etc/uwsgi/apps-available/troposphere.ini
 RUN ln -s /etc/uwsgi/apps-available/troposphere.ini /etc/uwsgi/apps-enabled/troposphere.ini
 
 # Cleanup
