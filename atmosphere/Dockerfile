@@ -65,6 +65,7 @@ RUN apt-get autoremove -y && \
 
 # Prepare entrypoint
 COPY web_shell_no_gateone.yml /opt/web_shell_no_gateone.yml
+COPY ssh.config /root/.ssh/config
 COPY entrypoint.sh /root/entrypoint.sh
 RUN chmod +x /root/entrypoint.sh
 WORKDIR /opt/dev/atmosphere
