@@ -17,12 +17,7 @@ chmod o+rw /opt/dev/troposphere/logs
 sed -i "s/^            api_root=settings.API_V2_ROOT,$/            api_root\=\'https\:\/\/nginx\/api\/v2\'\,/" /opt/dev/troposphere/troposphere/views/web_desktop.py
 sed -i "s/^    url = .+$/    url = data.get('token_url').replace('guacamole','localhost',1)/" /opt/dev/troposphere/troposphere/views/web_desktop.py
 
-# Configure and run nginx
-. $SECRETS_DIR/tropo_vars.env
-cp $TLS_BYO_PRIVKEY_DIR /etc/ssl/private/localhost.key
-cp $TLS_BYO_CERT_DIR /etc/ssl/certs/localhost.crt
-cp $TLS_BYO_CACHAIN_DIR /etc/ssl/certs/localhost.cachain.crt
-cat /etc/ssl/certs/localhost.crt /etc/ssl/certs/localhost.cachain.crt > /etc/ssl/certs/localhost.fullchain.crt
+# Run nginx
 nginx
 
 # Wait for DB to be active
