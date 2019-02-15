@@ -67,7 +67,6 @@ RUN apt-get autoremove -y && \
 # Setup NGINX
 RUN openssl dhparam -out /etc/ssl/certs/dhparam.pem 1024
 COPY nginx/ /etc/nginx/
-RUN ln -s /etc/nginx/sites-available/site.conf /etc/nginx/sites-enabled/site.conf
 
 # Prepare entrypoint
 COPY entrypoint.sh /root/entrypoint.sh

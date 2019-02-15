@@ -14,11 +14,8 @@ touch /opt/dev/troposphere/logs/troposphere.log
 chown -R www-data:www-data /opt/dev/troposphere/logs
 chmod o+rw /opt/dev/troposphere/logs
 
-sed -i "s/^            api_root=settings.API_V2_ROOT,$/            api_root\=\'https\:\/\/nginx\/api\/v2\'\,/" /opt/dev/troposphere/troposphere/views/web_desktop.py
-sed -i "s/^    url = .+$/    url = data.get('token_url').replace('guacamole','localhost',1)/" /opt/dev/troposphere/troposphere/views/web_desktop.py
-
-# Run nginx
-nginx
+# sed -i "s/^            api_root=settings.API_V2_ROOT,$/            api_root\=\'https\:\/\/nginx\/api\/v2\'\,/" /opt/dev/troposphere/troposphere/views/web_desktop.py
+# sed -i "s/^    url = .+$/    url = data.get('token_url').replace('guacamole','localhost',1)/" /opt/dev/troposphere/troposphere/views/web_desktop.py
 
 # Wait for DB to be active
 echo "Waiting for postgres..."
@@ -30,6 +27,17 @@ mkdir /opt/dev/troposphere/troposphere/tropo-static
 
 cd /opt/dev/troposphere
 npm install --unsafe-perm
-npm run build --production
 
-sudo su -l www-data -s /bin/bash -c "UWSGI_DEB_CONFNAMESPACE=app UWSGI_DEB_CONFNAME=troposphere /opt/env/troposphere/bin/uwsgi --ini /usr/share/uwsgi/conf/default.ini --ini /etc/uwsgi/apps-enabled/troposphere.ini"
+if [[ $1 = "dev" ]]
+then
+  ln -s /etc/nginx/sites-available/site-dev.conf /etc/nginx/sites-enabled/site.conf
+  nginx
+  sed -i "s/^    url = .+$/    url = data.get('token_url').replace('guacamole','localhost',1)/" /opt/dev/troposphere/troposphere/views/web_desktop.py
+  sudo su -l www-data -s /bin/bash -c "UWSGI_DEB_CONFNAMESPACE=app UWSGI_DEB_CONFNAME=troposphere /opt/env/troposphere/bin/uwsgi --daemonize2 /opt/dev/troposphere/logs/uwsgi.log --ini /usr/share/uwsgi/conf/default.ini --ini /etc/uwsgi/apps-enabled/troposphere.ini"
+  npm run serve -- --public localhost
+else
+  npm run build --production
+  nginx
+  ln -s /etc/nginx/sites-available/site-prod.conf /etc/nginx/sites-enabled/site.conf
+  sudo su -l www-data -s /bin/bash -c "UWSGI_DEB_CONFNAMESPACE=app UWSGI_DEB_CONFNAME=troposphere /opt/env/troposphere/bin/uwsgi --ini /usr/share/uwsgi/conf/default.ini --ini /etc/uwsgi/apps-enabled/troposphere.ini"
+fi
