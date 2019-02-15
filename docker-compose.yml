@@ -21,7 +21,6 @@ services:
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
       - 'guacamole-keys:/etc/guacamole/keys:rw'
       - './logs/celery:/var/log/celery:rw'
-      - './logs/atmosphere:/opt/dev/atmosphere/logs:rw'
     depends_on:
       - 'postgres'
 
@@ -31,7 +30,6 @@ services:
     volumes:
       - '../troposphere:/opt/dev/troposphere'
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
-      - './logs/troposphere:/opt/dev/troposphere/logs:rw'
     depends_on:
       - 'atmosphere'
     ports:
