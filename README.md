@@ -1,10 +1,6 @@
 # Atmosphere-Docker-Dev
 Entire Atmosphere development environment in Docker Containers using Docker-Compose.
 
-**Please note that this is a work in progress. It currently works to deploy a local Atmosphere setup, but more work is required to harness the full potential of Docker Compose. Create issues for any problems or feature requests.**
-
-**Also, take a look at the open issues to see what you can expect to go wrong**
-
 
 ## Getting started
 1. Clone this repository in the same directory as [Troposphere](https://github.com/cyverse/troposphere), [Atmosphere](https://github.com/cyverse/atmosphere), and [Atmosphere Ansible](https://github.com/cyverse/atmosphere-ansible) repositories (**these must be present for this to work properly**)
@@ -18,27 +14,34 @@ Entire Atmosphere development environment in Docker Containers using Docker-Comp
 3. Clone the `atmosphere-docker-secrets` repository in the same directory as this repository (not inside this repository directory)
     - Change `MOCK_USER` variable in `atmosphere.ini` and `troposphere.ini` to your username
 
-    
+
 4. `docker-compose up` to start all containers (use the `-d` option to start containers in the background)
     - Your containers should be ready when you see `webpack: Compiled successfully.` from Troposphere
     - Access Atmosphere in your browser at `localhost`
 
 
+**NOTE**: In order to run a production setup, use `docker-compose -f docker-compose-prod.yml <cmd>` in the commands above. Also remember to change the branch of `atmosphere-docker-secrets` to match your production environment.
+
+
 Since this directly uses your local directories for Atmosphere, Troposphere, and Atmosphere-Ansible, these directories will be modified to have things like updated settings files, `*.pyc` files and others present in the `.gitignore` files. To clean up your directory and delete all files recognized by gitignore, run `git clean -fdx`
 
-Troposphere changes will be automatically built whenever they are made.
 
-Atmosphere may have to restart to have all changes (`docker-compose restart atmosphere`).
+Troposphere and Atmosphere changes will be automatically built whenever they are made if using the development compose file (default).
 
-Variables ini files in atmosphere-docker-secrets are linked to the files used by Atmosphere, Troposphere, and Atmosphere-Ansible so you can easily modify those files and have them accessible by the services that use them. Easily re-run the configure scripts with these commands:
+
+Variables ini files in atmosphere-docker-secrets are linked to the files used by Atmosphere, Troposphere, and Atmosphere-Ansible so you can easily modify those files locally and have them accessible by the services that use them. Easily re-run the configure scripts with these commands:
 ```shell
-docker exec -ti $(docker ps -f name=troposphere --format "{{.Names}}") /opt/env/troposphere/bin/python configure # configure Troposphere
+# Configure Troposphere
+docker exec -ti $(docker ps -f name=troposphere --format "{{.Names}}") /opt/env/troposphere/bin/python configure
 
-docker exec -ti $(docker ps -f name=atmosphere_ --format "{{.Names}}") /opt/env/atmosphere/bin/python configure # configure Atmosphere
+# Configure Atmosphere
+docker exec -ti $(docker ps -f name=atmosphere_ --format "{{.Names}}") /opt/env/atmosphere/bin/python configure
 
-docker exec -ti $(docker ps -f name=atmosphere_ --format "{{.Names}}") /opt/env/atmosphere/bin/python /opt/dev/atmosphere-ansible/configure # configure Atmosphere-Ansible
+# Configure Atmosphere-Ansible
+docker exec -ti $(docker ps -f name=atmosphere_ --format "{{.Names}}") /opt/env/atmosphere/bin/python /opt/dev/atmosphere-ansible/configure
 
-docker exec -ti $(docker ps -f name=atmosphere_ --format "{{.Names}}") /opt/env/atmo/bin/python manage.py shell # access Atmosphere Django shell
+# Access Atmosphere Django shell
+docker exec -ti $(docker ps -f name=atmosphere_ --format "{{.Names}}") /opt/env/atmo/bin/python manage.py shell
 ```
 
 
