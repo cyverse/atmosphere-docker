@@ -5,8 +5,7 @@ source /opt/env/troposphere/bin/activate && \
 pip install -r /opt/dev/troposphere/requirements.txt
 chmod o+rw /opt/dev/troposphere/logs
 
-export SECRETS_DIR=/opt/dev/atmosphere-docker-secrets
-ln -s $SECRETS_DIR/inis/troposphere.ini /opt/dev/troposphere/variables.ini
+ln -s /opt/dev/atmosphere-docker-secrets/inis/troposphere.ini /opt/dev/troposphere/variables.ini
 /opt/env/troposphere/bin/python /opt/dev/troposphere/configure
 
 # Allow user to edit/delete logs

@@ -7,25 +7,24 @@ pip install -r /opt/dev/atmosphere/requirements.txt
 
 # Setup SSH keys
 export SECRETS_DIR=/opt/dev/atmosphere-docker-secrets
-. $SECRETS_DIR/atmo_vars.env
 mkdir /opt/dev/atmosphere/extras/ssh
-cp $SSH_PRIV_KEY /opt/dev/atmosphere/extras/ssh/id_rsa
-cp $SSH_PUB_KEY /opt/dev/atmosphere/extras/ssh/id_rsa.pub
+cp $SECRETS_DIR/ssh/id_rsa /opt/dev/atmosphere/extras/ssh/id_rsa
+cp $SECRETS_DIR/ssh/id_rsa.pub /opt/dev/atmosphere/extras/ssh/id_rsa.pub
 echo -e "Host *\n\tIdentityFile /opt/dev/atmosphere/extras/ssh/id_rsa\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile=/dev/null" >> ~/.ssh/config
 
 # Setup instance deploy automation
-cp $ANSIBLE_HOSTS_FILE /opt/dev/atmosphere-ansible/ansible/hosts
-cp -r $ANSIBLE_GROUP_VARS_FOLDER /opt/dev/atmosphere-ansible/ansible/group_vars
+cp $SECRETS_DIR/atmosphere-ansible/hosts /opt/dev/atmosphere-ansible/ansible/hosts
+cp -r $SECRETS_DIR/atmosphere-ansible/group_vars /opt/dev/atmosphere-ansible/ansible/group_vars
 
-# Copy ini files
+# Link ini files
 ln -s $SECRETS_DIR/inis/atmosphere.ini /opt/dev/atmosphere/variables.ini
 ln -s $SECRETS_DIR/inis/atmosphere-ansible.ini /opt/dev/atmosphere-ansible/variables.ini
 /opt/env/atmo/bin/python /opt/dev/atmosphere/configure
 /opt/env/atmo/bin/python /opt/dev/atmosphere-ansible/configure
 
 # Allow user to edit/delete logs
-# chown www-data:www-data /opt/dev/atmosphere/logs
-# chmod o+rw /opt/dev/atmosphere/logs
+chown www-data:www-data /opt/dev/atmosphere/logs
+chmod o+rw /opt/dev/atmosphere/logs
 
 # Start services
 service redis-server start
