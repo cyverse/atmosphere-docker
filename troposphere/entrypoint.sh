@@ -1,5 +1,16 @@
 #!/bin/bash
 
+if test ! -d /opt/dev/troposphere/.git/
+then
+  >&2 echo "ERROR: Troposphere repository does not exist and is required"
+  exit 1
+fi
+if test ! -d /opt/dev/atmosphere-docker-secrets/.git/
+then
+  >&2 echo "ERROR: Atmosphere-docker-secrets repository does not exist and is required"
+  exit 1
+fi
+
 # Setup Troposphere
 source /opt/env/troposphere/bin/activate && \
 pip install -r /opt/dev/troposphere/requirements.txt
