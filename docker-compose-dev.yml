@@ -23,6 +23,7 @@ services:
       - './logs/celery:/var/log/celery:rw'
     depends_on:
       - 'postgres'
+    command: 'dev'
 
   troposphere:
     build:

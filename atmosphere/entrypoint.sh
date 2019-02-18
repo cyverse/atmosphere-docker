@@ -4,7 +4,6 @@ MANAGE_CMD="/opt/env/atmo/bin/python /opt/dev/atmosphere/manage.py"
 # Setup Atmosphere
 source /opt/env/atmo/bin/activate && \
 pip install -r /opt/dev/atmosphere/requirements.txt
-mv /opt/web_shell_no_gateone.yml /opt/dev/atmosphere-ansible/ansible/playbooks/instance_deploy/41_shell_access.yml
 
 # Setup SSH keys
 export SECRETS_DIR=/opt/dev/atmosphere-docker-secrets
@@ -25,8 +24,8 @@ ln -s $SECRETS_DIR/inis/atmosphere-ansible.ini /opt/dev/atmosphere-ansible/varia
 /opt/env/atmo/bin/python /opt/dev/atmosphere-ansible/configure
 
 # Allow user to edit/delete logs
-chown www-data:www-data /opt/dev/atmosphere/logs
-chmod o+rw /opt/dev/atmosphere/logs
+# chown www-data:www-data /opt/dev/atmosphere/logs
+# chmod o+rw /opt/dev/atmosphere/logs
 
 # Start services
 service redis-server start
@@ -52,4 +51,12 @@ $MANAGE_CMD loaddata --settings=atmosphere.settings --pythonpath=/opt/dev/atmosp
 $MANAGE_CMD createcachetable --settings=atmosphere.settings --pythonpath=/opt/dev/atmosphere atmosphere_cache_requests
 
 chmod 600 /opt/dev/atmosphere/extras/ssh/id_rsa
-sudo su -l www-data -s /bin/bash -c "UWSGI_DEB_CONFNAMESPACE=app UWSGI_DEB_CONFNAME=atmosphere /opt/env/atmo/bin/uwsgi --ini /usr/share/uwsgi/conf/default.ini --ini /etc/uwsgi/apps-enabled/atmosphere.ini"
+
+if [[ $1 = "dev" ]]
+then
+  cp /opt/web_shell_no_gateone.yml /opt/dev/atmosphere-ansible/ansible/playbooks/instance_deploy/41_shell_access.yml
+  echo "Starting Django Python..."
+  /opt/env/atmo/bin/python /opt/dev/atmosphere/manage.py runserver 0.0.0.0:8000
+else
+  sudo su -l www-data -s /bin/bash -c "UWSGI_DEB_CONFNAMESPACE=app UWSGI_DEB_CONFNAME=atmosphere /opt/env/atmo/bin/uwsgi --ini /usr/share/uwsgi/conf/default.ini --ini /etc/uwsgi/apps-enabled/atmosphere.ini"
+fi

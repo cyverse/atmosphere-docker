@@ -30,7 +30,7 @@ then
   ln -s /etc/nginx/sites-available/site-dev.conf /etc/nginx/sites-enabled/site.conf
   nginx
   sed -i "s/^    url = .+$/    url = data.get('token_url').replace('guacamole','localhost',1)/" /opt/dev/troposphere/troposphere/views/web_desktop.py
-  sudo su -l www-data -s /bin/bash -c "UWSGI_DEB_CONFNAMESPACE=app UWSGI_DEB_CONFNAME=troposphere /opt/env/troposphere/bin/uwsgi --daemonize2 /opt/dev/troposphere/logs/uwsgi.log --ini /usr/share/uwsgi/conf/default.ini --ini /etc/uwsgi/apps-enabled/troposphere.ini"
+  /opt/env/troposphere/bin/python /opt/dev/troposphere/manage.py runserver 0.0.0.0:8001 &
   npm run serve -- --public localhost
 else
   npm run build --production
