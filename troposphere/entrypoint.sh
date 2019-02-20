@@ -38,7 +38,9 @@ mkdir /opt/dev/troposphere/troposphere/tropo-static
 cd /opt/dev/troposphere
 npm install --unsafe-perm
 
-if [[ $1 = "dev" ]]
+source /opt/dev/atmosphere-docker-secrets/env
+
+if [[ $env_type = "dev" ]]
 then
   ln -s /etc/nginx/sites-available/site-dev.conf /etc/nginx/sites-enabled/site.conf
   nginx

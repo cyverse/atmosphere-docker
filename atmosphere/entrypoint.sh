@@ -67,7 +67,9 @@ $MANAGE_CMD createcachetable --settings=atmosphere.settings --pythonpath=/opt/de
 
 chmod 600 /opt/dev/atmosphere/extras/ssh/id_rsa
 
-if [[ $1 = "dev" ]]
+source /opt/dev/atmosphere-docker-secrets/env
+
+if [[ $env_type = "dev" ]]
 then
   cp /opt/web_shell_no_gateone.yml /opt/dev/atmosphere-ansible/ansible/playbooks/instance_deploy/41_shell_access.yml
   echo "Starting Django Python..."
