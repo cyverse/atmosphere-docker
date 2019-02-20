@@ -1,21 +1,19 @@
 #!/bin/bash
 
+function check_for_repo() {
+  if test ! -d /opt/dev/$1/.git/
+  then
+    >&2 echo "ERROR: $1 repository does not exist and is required"
+    exit 1
+  else
+    echo "$1 repository exists. Continuing..."
+  fi
+}
+
 # Check that all necessary repositories exists
-if test ! -d /opt/dev/atmosphere/.git/
-then
-  >&2 echo "ERROR: Atmosphere repository does not exist and is required"
-  exit 1
-fi
-if test ! -d /opt/dev/atmosphere-ansible/.git/
-then
-  >&2 echo "ERROR: Atmosphere-ansible repository does not exist and is required"
-  exit 1
-fi
-if test ! -d /opt/dev/atmosphere-docker-secrets/.git/
-then
-  >&2 echo "ERROR: Atmosphere-docker-secrets repository does not exist and is required"
-  exit 1
-fi
+check_for_repo atmosphere
+check_for_repo atmosphere-ansible
+check_for_repo atmosphere-docker-secrets
 
 MANAGE_CMD="/opt/env/atmo/bin/python /opt/dev/atmosphere/manage.py"
 
