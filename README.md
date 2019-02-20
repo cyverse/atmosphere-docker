@@ -12,21 +12,20 @@ Entire Atmosphere development environment in Docker Containers using Docker-Comp
 
 
 3. Clone the `atmosphere-docker-secrets` repository in the same directory as this repository (not inside this repository directory)
-    - Change `MOCK_USER` variable in `atmosphere.ini` and `troposphere.ini` to your username
+    - Checkout branch with the correct variables for your environment
+    - Change `MOCK_USER` variable in `atmosphere.ini` and `troposphere.ini` to your username if using 'local' variables
 
 
-4. `docker-compose up` to start all containers (use the `-d` option to start containers in the background)
-    - Your containers should be ready when you see `webpack: Compiled successfully.` from Troposphere
-    - Access Atmosphere in your browser at `localhost`
+4. `docker-compose up` to start all containers (use the `-d` option to run containers in the background)
+    - The container's entrypoint will automatically read a variable from the `env` file in `atmosphere-docker-secrets` to determine if running a production or development environment
+    - If you are using a local development version and want Guacamole also, replace the `docker-compose` part of all commands with: `docker-compose -f docker-compose.yml -f docker-compose.guac.yml`
+    - If using local development version:
+      - Your containers should be ready when you see `webpack: Compiled successfully.` from Troposphere and `Starting Django Python...` from Atmosphere
+      - Access Atmosphere in your browser at `localhost`
+      - Troposphere and Atmosphere changes will be automatically built
 
 
-**NOTE**: In order to run a production setup, use `docker-compose -f docker-compose-prod.yml <cmd>` in the commands above. Also remember to change the branch of `atmosphere-docker-secrets` to match your production environment.
-
-
-Since this directly uses your local directories for Atmosphere, Troposphere, and Atmosphere-Ansible, these directories will be modified to have things like updated settings files, `*.pyc` files and others present in the `.gitignore` files. To clean up your directory and delete all files recognized by gitignore, run `git clean -fdx`
-
-
-Troposphere and Atmosphere changes will be automatically built whenever they are made if using the development compose file (default).
+**NOTE**: Since this directly uses your local directories for Atmosphere, Troposphere, and Atmosphere-Ansible, these directories will be modified to have things like updated settings files, `*.pyc` files and others present in the `.gitignore` files. To clean up your directory and delete all files recognized by gitignore, run `git clean -fdx`
 
 
 Variables ini files in atmosphere-docker-secrets are linked to the files used by Atmosphere, Troposphere, and Atmosphere-Ansible so you can easily modify those files locally and have them accessible by the services that use them. Easily re-run the configure scripts with these commands:
