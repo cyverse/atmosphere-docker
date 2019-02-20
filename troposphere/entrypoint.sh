@@ -38,7 +38,7 @@ if [[ $env_type = "dev" ]]
 then
   ln -s /etc/nginx/sites-available/site-dev.conf /etc/nginx/sites-enabled/site.conf
   nginx
-  sed -i "s/^    url = .+$/    url = data.get('token_url').replace('guacamole','localhost',1)/" /opt/dev/troposphere/troposphere/views/web_desktop.py
+  sed -i "s/^    url = .*$/    url = data.get('token_url').replace('guacamole','localhost',1)/" /opt/dev/troposphere/troposphere/views/web_desktop.py
   /opt/env/troposphere/bin/python /opt/dev/troposphere/manage.py runserver 0.0.0.0:8001 &
   npm run serve -- --public localhost
 else
