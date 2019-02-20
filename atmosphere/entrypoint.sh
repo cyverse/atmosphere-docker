@@ -38,18 +38,14 @@ ln -s $SECRETS_DIR/inis/atmosphere-ansible.ini /opt/dev/atmosphere-ansible/varia
 /opt/env/atmo/bin/python /opt/dev/atmosphere/configure
 /opt/env/atmo/bin/python /opt/dev/atmosphere-ansible/configure
 
-# Allow user to edit/delete logs
-chown www-data:www-data /opt/dev/atmosphere/logs
-chmod o+rw /opt/dev/atmosphere/logs
+# Allow www-data user to access/modify Atmosphere files without making user lose ownership
+chown -R :2000 /opt/dev/atmosphere
+chmod g+s /opt/dev/atmosphere
 
 # Start services
 service redis-server start
 service celerybeat start
 service celeryd start
-
-# Allow user to edit/delete logs
-chown -R www-data:www-data /var/log/celery
-chmod -R o+rw /var/log/celery
 
 # Wait for DB to be active
 echo "Waiting for postgres..."

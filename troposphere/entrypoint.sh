@@ -17,15 +17,9 @@ check_for_repo atmosphere-docker-secrets
 # Setup Troposphere
 source /opt/env/troposphere/bin/activate && \
 pip install -r /opt/dev/troposphere/requirements.txt
-chmod o+rw /opt/dev/troposphere/logs
 
 ln -s /opt/dev/atmosphere-docker-secrets/inis/troposphere.ini /opt/dev/troposphere/variables.ini
 /opt/env/troposphere/bin/python /opt/dev/troposphere/configure
-
-# Allow user to edit/delete logs
-touch /opt/dev/troposphere/logs/troposphere.log
-chown -R www-data:www-data /opt/dev/troposphere/logs
-chmod o+rw /opt/dev/troposphere/logs
 
 # Wait for DB to be active
 echo "Waiting for postgres..."

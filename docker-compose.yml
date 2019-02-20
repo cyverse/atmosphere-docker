@@ -19,7 +19,6 @@ services:
       - '../atmosphere:/opt/dev/atmosphere'
       - '../atmosphere-ansible:/opt/dev/atmosphere-ansible'
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
-      - './logs/celery:/var/log/celery:rw'
     depends_on:
       - 'postgres'
 
