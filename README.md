@@ -1,4 +1,4 @@
-# Atmosphere-Docker-Dev
+# Atmosphere Docker
 Entire Atmosphere development environment in Docker Containers using Docker-Compose.
 
 
