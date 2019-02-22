@@ -8,7 +8,7 @@ services:
       - 'guacamole-keys:/etc/guacamole/keys:rw'
 
   guacamole:
-    image: 'guacamole/guacamole:0.9.14'
+    image: 'guacamole/guacamole:1.0.0'
     environment:
       GUACAMOLE_HOME: '/guac_stuff'
       GUACD_HOSTNAME: 'guacd'
@@ -19,7 +19,7 @@ services:
       - '8080:8080'
 
   guacd:
-    image: 'guacamole/guacd:0.9.14'
+    image: 'guacamole/guacd:1.0.0'
 
 volumes:
   guacamole-keys:
