@@ -19,9 +19,6 @@ services:
       - '../atmosphere:/opt/dev/atmosphere'
       - '../atmosphere-ansible:/opt/dev/atmosphere-ansible'
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
-      - 'guacamole-keys:/etc/guacamole/keys:rw'
-      - './logs/celery:/var/log/celery:rw'
-      - './logs/atmosphere:/opt/dev/atmosphere/logs:rw'
     depends_on:
       - 'postgres'
 
@@ -31,26 +28,8 @@ services:
     volumes:
       - '../troposphere:/opt/dev/troposphere'
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
-      - './logs/troposphere:/opt/dev/troposphere/logs:rw'
     depends_on:
       - 'atmosphere'
     ports:
       - '443:443'
       - '80:80'
-
-  guacamole:
-    image: 'guacamole/guacamole:0.9.14'
-    environment:
-      GUACAMOLE_HOME: '/guac_stuff'
-      GUACD_HOSTNAME: 'guacd'
-    volumes:
-      - './guacamole:/guac_stuff:rw'
-      - 'guacamole-keys:/guac_stuff/keys:rw'
-    ports:
-      - '8080:8080'
-
-  guacd:
-    image: 'guacamole/guacd:0.9.14'
-
-volumes:
-  guacamole-keys:

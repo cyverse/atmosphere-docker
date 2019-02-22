@@ -1,29 +1,25 @@
 #!/bin/bash
 
+function check_for_repo() {
+  if test ! -d /opt/dev/$1/.git/
+  then
+    >&2 echo "ERROR: $1 repository does not exist and is required"
+    exit 1
+  else
+    echo "$1 repository exists. Continuing..."
+  fi
+}
+
+# Check that all necessary repositories exists
+check_for_repo troposphere
+check_for_repo atmosphere-docker-secrets
+
 # Setup Troposphere
 source /opt/env/troposphere/bin/activate && \
 pip install -r /opt/dev/troposphere/requirements.txt
-chmod o+rw /opt/dev/troposphere/logs
 
-export SECRETS_DIR=/opt/dev/atmosphere-docker-secrets
-ln -s $SECRETS_DIR/inis/troposphere.ini /opt/dev/troposphere/variables.ini
+ln -s /opt/dev/atmosphere-docker-secrets/inis/troposphere.ini /opt/dev/troposphere/variables.ini
 /opt/env/troposphere/bin/python /opt/dev/troposphere/configure
-
-# Allow user to edit/delete logs
-touch /opt/dev/troposphere/logs/troposphere.log
-chown -R www-data:www-data /opt/dev/troposphere/logs
-chmod o+rw /opt/dev/troposphere/logs
-
-sed -i "s/^            api_root=settings.API_V2_ROOT,$/            api_root\=\'https\:\/\/nginx\/api\/v2\'\,/" /opt/dev/troposphere/troposphere/views/web_desktop.py
-sed -i "s/^    url = .+$/    url = data.get('token_url').replace('guacamole','localhost',1)/" /opt/dev/troposphere/troposphere/views/web_desktop.py
-
-# Configure and run nginx
-. $SECRETS_DIR/tropo_vars.env
-cp $TLS_BYO_PRIVKEY_DIR /etc/ssl/private/localhost.key
-cp $TLS_BYO_CERT_DIR /etc/ssl/certs/localhost.crt
-cp $TLS_BYO_CACHAIN_DIR /etc/ssl/certs/localhost.cachain.crt
-cat /etc/ssl/certs/localhost.crt /etc/ssl/certs/localhost.cachain.crt > /etc/ssl/certs/localhost.fullchain.crt
-nginx
 
 # Wait for DB to be active
 echo "Waiting for postgres..."
@@ -35,7 +31,19 @@ mkdir /opt/dev/troposphere/troposphere/tropo-static
 
 cd /opt/dev/troposphere
 npm install --unsafe-perm
-npm run build --production
 
-sudo su -l www-data -s /bin/bash -c "UWSGI_DEB_CONFNAMESPACE=app UWSGI_DEB_CONFNAME=troposphere /opt/env/troposphere/bin/uwsgi --daemonize2 /opt/dev/troposphere/logs/uwsgi.log --ini /usr/share/uwsgi/conf/default.ini --ini /etc/uwsgi/apps-enabled/troposphere.ini"
-npm run serve -- --public localhost
+source /opt/dev/atmosphere-docker-secrets/env
+
+if [[ $env_type = "dev" ]]
+then
+  ln -s /etc/nginx/sites-available/site-dev.conf /etc/nginx/sites-enabled/site.conf
+  nginx
+  sed -i "s/^    url = .*$/    url = data.get('token_url').replace('guacamole','localhost',1)/" /opt/dev/troposphere/troposphere/views/web_desktop.py
+  /opt/env/troposphere/bin/python /opt/dev/troposphere/manage.py runserver 0.0.0.0:8001 &
+  npm run serve -- --public localhost
+else
+  npm run build --production
+  ln -s /etc/nginx/sites-available/site-prod.conf /etc/nginx/sites-enabled/site.conf
+  nginx
+  sudo su -l www-data -s /bin/bash -c "UWSGI_DEB_CONFNAMESPACE=app UWSGI_DEB_CONFNAME=troposphere /opt/env/troposphere/bin/uwsgi --ini /usr/share/uwsgi/conf/default.ini --ini /etc/uwsgi/apps-enabled/troposphere.ini"
+fi

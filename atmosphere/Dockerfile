@@ -63,8 +63,12 @@ RUN ln -s /etc/uwsgi/apps-available/atmosphere.ini /etc/uwsgi/apps-enabled/atmos
 RUN apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
+RUN addgroup --gid 2000 atmosphere
+RUN usermod -a -G atmosphere www-data
+
 # Prepare entrypoint
 COPY web_shell_no_gateone.yml /opt/web_shell_no_gateone.yml
+COPY ssh.config /root/.ssh/config
 COPY entrypoint.sh /root/entrypoint.sh
 RUN chmod +x /root/entrypoint.sh
 WORKDIR /opt/dev/atmosphere
