@@ -39,7 +39,9 @@ ln -s $SECRETS_DIR/inis/atmosphere-ansible.ini /opt/dev/atmosphere-ansible/varia
 /opt/env/atmo/bin/python /opt/dev/atmosphere-ansible/configure
 
 # Allow www-data user to access/modify Atmosphere files without making user lose ownership
-chown -R :2000 /opt/dev/atmosphere
+mkdir -p /opt/dev/atmosphere/logs
+chown -R 1000:2000 /opt/dev/atmosphere
+chmod -R g+rw /opt/dev/atmosphere
 chmod g+s /opt/dev/atmosphere
 
 # Start services
