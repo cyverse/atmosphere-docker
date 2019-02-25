@@ -25,7 +25,7 @@ ln -s /opt/dev/atmosphere-docker-secrets/inis/troposphere.ini /opt/dev/troposphe
 echo "Waiting for postgres..."
 while ! nc -z postgres 5432; do sleep 5; done
 
-mkdir /opt/dev/troposphere/troposphere/tropo-static
+mkdir -p /opt/dev/troposphere/troposphere/tropo-static
 /opt/env/troposphere/bin/python /opt/dev/troposphere/manage.py collectstatic --noinput --settings=troposphere.settings --pythonpath=/opt/dev/troposphere
 /opt/env/troposphere/bin/python /opt/dev/troposphere/manage.py migrate --noinput --settings=troposphere.settings --pythonpath=/opt/dev/troposphere
 
@@ -39,7 +39,8 @@ then
   ln -s /etc/nginx/sites-available/site-dev.conf /etc/nginx/sites-enabled/site.conf
   nginx
   sed -i "s/^    url = .*$/    url = data.get('token_url').replace('guacamole','localhost',1)/" /opt/dev/troposphere/troposphere/views/web_desktop.py
-  /opt/env/troposphere/bin/python /opt/dev/troposphere/manage.py runserver 0.0.0.0:8001 &
+  chown -R 1000:1000 /opt/dev/troposphere
+  sudo su -l user -s /bin/bash -c "/opt/env/troposphere/bin/python /opt/dev/troposphere/manage.py runserver 0.0.0.0:8001 &"
   npm run serve -- --public localhost
 else
   npm run build --production

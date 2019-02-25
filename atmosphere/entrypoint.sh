@@ -23,7 +23,7 @@ pip install -r /opt/dev/atmosphere/requirements.txt
 
 # Setup SSH keys
 export SECRETS_DIR=/opt/dev/atmosphere-docker-secrets
-mkdir /opt/dev/atmosphere/extras/ssh
+mkdir -p /opt/dev/atmosphere/extras/ssh
 cp $SECRETS_DIR/ssh/id_rsa /opt/dev/atmosphere/extras/ssh/id_rsa
 cp $SECRETS_DIR/ssh/id_rsa.pub /opt/dev/atmosphere/extras/ssh/id_rsa.pub
 echo -e "Host *\n\tIdentityFile /opt/dev/atmosphere/extras/ssh/id_rsa\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile=/dev/null" >> ~/.ssh/config
@@ -38,11 +38,18 @@ ln -s $SECRETS_DIR/inis/atmosphere-ansible.ini /opt/dev/atmosphere-ansible/varia
 /opt/env/atmo/bin/python /opt/dev/atmosphere/configure
 /opt/env/atmo/bin/python /opt/dev/atmosphere-ansible/configure
 
-# Allow www-data user to access/modify Atmosphere files without making user lose ownership
 mkdir -p /opt/dev/atmosphere/logs
-chown -R 1000:2000 /opt/dev/atmosphere
-chmod -R g+rw /opt/dev/atmosphere
-chmod g+s /opt/dev/atmosphere
+
+source /opt/dev/atmosphere-docker-secrets/env
+
+if [[ $env_type = "dev" ]]
+then
+  chown -R 1000:1000 /opt/dev/atmosphere
+  sed -i "s/^CELERYD_USER=\"www-data\"$/CELERYD_USER=\"user\"/" /etc/init.d/celeryd
+  sed -i "s/^CELERYD_GROUP=\"www-data\"$/CELERYD_GROUP=\"1000\"/" /etc/init.d/celeryd
+  sed -i "s/^CELERY_USER=\"www-data\"$/CELERY_USER=\"user\"/" /etc/init.d/celerybeat
+  sed -i "s/^CELERY_GROUP=\"www-data\"$/CELERY_GROUP=\"1000\"/" /etc/init.d/celerybeat
+fi
 
 # Start services
 service redis-server start
@@ -54,7 +61,7 @@ echo "Waiting for postgres..."
 while ! nc -z postgres 5432; do sleep 5; done
 
 # Finish Django DB setup
-mkdir /opt/dev/atmosphere/static
+mkdir -p /opt/dev/atmosphere/static
 $MANAGE_CMD collectstatic --noinput --settings=atmosphere.settings --pythonpath=/opt/dev/atmosphere
 $MANAGE_CMD migrate --noinput --settings=atmosphere.settings --pythonpath=/opt/dev/atmosphere
 $MANAGE_CMD loaddata --settings=atmosphere.settings --pythonpath=/opt/dev/atmosphere /opt/dev/atmosphere/core/fixtures/provider.json
@@ -65,13 +72,12 @@ $MANAGE_CMD createcachetable --settings=atmosphere.settings --pythonpath=/opt/de
 
 chmod 600 /opt/dev/atmosphere/extras/ssh/id_rsa
 
-source /opt/dev/atmosphere-docker-secrets/env
-
 if [[ $env_type = "dev" ]]
 then
   cp /opt/web_shell_no_gateone.yml /opt/dev/atmosphere-ansible/ansible/playbooks/instance_deploy/41_shell_access.yml
+  chown -R 1000:1000 /opt/dev/atmosphere
   echo "Starting Django Python..."
-  /opt/env/atmo/bin/python /opt/dev/atmosphere/manage.py runserver 0.0.0.0:8000
+  sudo su -l user -s /bin/bash -c "/opt/env/atmo/bin/python /opt/dev/atmosphere/manage.py runserver 0.0.0.0:8000"
 else
   sudo su -l www-data -s /bin/bash -c "UWSGI_DEB_CONFNAMESPACE=app UWSGI_DEB_CONFNAME=atmosphere /opt/env/atmo/bin/uwsgi --ini /usr/share/uwsgi/conf/default.ini --ini /etc/uwsgi/apps-enabled/atmosphere.ini"
 fi

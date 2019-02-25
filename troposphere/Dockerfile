@@ -68,6 +68,8 @@ RUN apt-get autoremove -y && \
 RUN openssl dhparam -out /etc/ssl/certs/dhparam.pem 1024
 COPY nginx/ /etc/nginx/
 
+RUN useradd user
+
 # Prepare entrypoint
 COPY entrypoint.sh /root/entrypoint.sh
 RUN chmod +x /root/entrypoint.sh
