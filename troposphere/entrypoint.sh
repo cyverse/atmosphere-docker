@@ -38,6 +38,7 @@ if [[ $env_type = "dev" ]]
 then
   ln -s /etc/nginx/sites-available/site-dev.conf /etc/nginx/sites-enabled/site.conf
   nginx
+  chown -R www-data:www-data /opt/dev/troposphere
   sed -i "s/^    url = .*$/    url = data.get('token_url').replace('guacamole','localhost',1)/" /opt/dev/troposphere/troposphere/views/web_desktop.py
   chown -R 1000:1000 /opt/dev/troposphere
   sudo su -l user -s /bin/bash -c "/opt/env/troposphere/bin/python /opt/dev/troposphere/manage.py runserver 0.0.0.0:8001 &"

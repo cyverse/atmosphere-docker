@@ -49,6 +49,8 @@ then
   sed -i "s/^CELERYD_GROUP=\"www-data\"$/CELERYD_GROUP=\"1000\"/" /etc/init.d/celeryd
   sed -i "s/^CELERY_USER=\"www-data\"$/CELERY_USER=\"user\"/" /etc/init.d/celerybeat
   sed -i "s/^CELERY_GROUP=\"www-data\"$/CELERY_GROUP=\"1000\"/" /etc/init.d/celerybeat
+else
+  chown -R www-data:www-data /opt/dev/atmosphere
 fi
 
 # Start services
