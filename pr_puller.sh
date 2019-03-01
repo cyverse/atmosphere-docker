@@ -46,8 +46,6 @@ if ! git fetch $remote pull/$pr_num/head:$branch; then
 fi
 git checkout $branch
 
-exit 10
-
 # go to atmosphere-docker and restart
 echo "Changing directory to atmosphere-docker and restarting"
 cd ../atmosphere-docker
