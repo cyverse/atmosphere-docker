@@ -45,6 +45,7 @@ then
   npm run serve -- --public localhost
 else
   npm run build --production
+  sed -i s/SERVER_NAME/$server_name/ /etc/nginx/sites-available/site-prod.conf
   ln -s /etc/nginx/sites-available/site-prod.conf /etc/nginx/sites-enabled/site.conf
   nginx
   sudo su -l www-data -s /bin/bash -c "UWSGI_DEB_CONFNAMESPACE=app UWSGI_DEB_CONFNAME=troposphere /opt/env/troposphere/bin/uwsgi --ini /usr/share/uwsgi/conf/default.ini --ini /etc/uwsgi/apps-enabled/troposphere.ini"
