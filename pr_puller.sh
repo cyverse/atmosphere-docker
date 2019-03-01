@@ -2,15 +2,24 @@
 
 # ./pr_puller.sh
 # Purpose: rudimentary manual CI/CD for Atmosphere stack on Atmosphere Docker
-# Usage: ./pr_puller.sh <repo> <pr_num>
+# Usage: ./pr_puller.sh <repo> <pr_num> [<remote>]
 
 repo=$1
 pr_num=$2
+remote=$3
+
+branch="pull_$pr_num"
 
 # check number of args
-if [ "$#" -ne 2 ]; then
-    echo "Usage: ./pr_puller.sh <repo> <pr_num>"
+if [ "$#" -lt 2 ]; then
+    echo "Usage: ./pr_puller.sh <repo> <pr_num> [<remote>]"
     exit 1
+fi
+
+# default remote if not given
+if [ -z $remote ]; then
+  echo "Using default remote 'origin'"
+  remote="origin"
 fi
 
 # check valid repo
@@ -26,14 +35,18 @@ if ! cd ../$repo; then
   exit 3
 fi
 
+# checkout master to avoid error if pull already checked out
+git checkout master &> /dev/null
+
 # fetch and checkout PR if it exists
-echo "Fetching and checking out PR #$pr_num to branch pull_$pr_num"
-if git fetch origin pull/$pr_num/head:pull_$pr_num; then
-  git checkout pull_$pr_num
-else
+echo "Fetching and checking out PR #$pr_num to branch $branch"
+if ! git fetch $remote pull/$pr_num/head:$branch; then
   echo "Pull request #$pr_num does not exist for $repo"
   exit 4
 fi
+git checkout $branch
+
+exit 10
 
 # go to atmosphere-docker and restart
 echo "Changing directory to atmosphere-docker and restarting"
