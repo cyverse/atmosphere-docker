@@ -4,15 +4,16 @@ function check_for_repo() {
   if test ! -d /opt/dev/$1/.git/
   then
     >&2 echo "ERROR: $1 repository does not exist and is required"
-    exit 1
+    return 1
   else
     echo "$1 repository exists. Continuing..."
+    return 0
   fi
 }
 
 # Check that all necessary repositories exists
-check_for_repo troposphere
-check_for_repo atmosphere-docker-secrets
+check_for_repo troposphere || exit 1
+check_for_repo atmosphere-docker-secrets || exit 1
 
 # Setup Troposphere
 source /opt/env/troposphere/bin/activate && \
