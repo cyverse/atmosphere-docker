@@ -13,8 +13,7 @@ services:
       TROPO_DB_NAME: 'troposphere'
 
   atmosphere:
-    build:
-      context: './atmosphere'
+    image: 'atmosphere'
     volumes:
       - '../atmosphere:/opt/dev/atmosphere'
       - '../atmosphere-ansible:/opt/dev/atmosphere-ansible'
@@ -23,8 +22,7 @@ services:
       - 'postgres'
 
   troposphere:
-    build:
-      context: './troposphere'
+    image: 'troposphere'
     volumes:
       - '../troposphere:/opt/dev/troposphere'
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
