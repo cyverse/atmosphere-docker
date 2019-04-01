@@ -3,12 +3,19 @@ language: python
 services:
   - docker
 
+env:
+  - GUAC_ARG='-f docker-compose.yml -f docker-compose.guac.yml' TEST_ARG='-f docker-compose.test.yml'
+
 before_install:
-- sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-- sudo chmod +x /usr/local/bin/docker-compose
-- docker-compose pull
-- docker-compose build
+  - sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  - sudo chmod +x /usr/local/bin/docker-compose
+  - docker-compose pull
+  - docker-compose ${GUAC_ARG} pull
+  - docker-compose ${TEST_ARG} pull
 
 script:
-- docker-compose start
-- docker ps
+  - docker-compose config
+  - docker-compose ${GUAC_ARG} config
+  - docker-compose ${TEST_ARG} config
+  - docker-compose build
+  - docker-compose ${TEST_ARG} up
