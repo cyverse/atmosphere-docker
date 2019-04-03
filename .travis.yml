@@ -20,4 +20,5 @@ script:
   - docker-compose ${TROPO_TEST_ARG} config
   - docker-compose build
   - docker-compose ${ATMO_TEST_ARG} up --exit-code-from atmosphere
+  - docker-compose ${ATMO_TEST_ARG} rm -f
   - docker-compose ${TROPO_TEST_ARG} up --exit-code-from troposphere
