@@ -4,8 +4,9 @@ version: '3'
 services:
 
   postgres:
-    build:
-      context: './postgres'
+    image: 'postgres:9.6'
+    volumes:
+      - './postgres:/docker-entrypoint-initdb.d'
     environment:
       POSTGRES_USER: 'atmo_app'
       POSTGRES_PASSWORD: 'atmosphere'

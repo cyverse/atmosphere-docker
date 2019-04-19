@@ -1,7 +1,6 @@
 # Postgres
 
 
-This container runs the PostgreSQL database
+This directory holds the files for the Postgres container.
+Add a `*.sql` file to import it into the database
 
-
-The Dockerfile is based off the official postgres Docker container and just adds a new startup script and optional `.sql` file. The entrypoint script creates the Troposphere database.
