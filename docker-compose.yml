@@ -13,7 +13,7 @@ services:
       TROPO_DB_NAME: 'troposphere'
 
   atmosphere:
-          image: 'cyverse/atmosphere:latest'
+    image: 'cyverse/atmosphere:latest'
     volumes:
       - '../atmosphere:/opt/dev/atmosphere'
       - '../atmosphere-ansible:/opt/dev/atmosphere-ansible'
@@ -22,7 +22,7 @@ services:
       - 'postgres'
 
   troposphere:
-          image: 'cyverse/troposphere:latest'
+    image: 'cyverse/troposphere:latest'
     volumes:
       - '../troposphere:/opt/dev/troposphere'
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
