@@ -15,6 +15,7 @@ services:
 
   atmosphere:
     image: 'cyverse/atmosphere:latest'
+    command: '' # put your user id here if running locally
     volumes:
       - '../atmosphere:/opt/dev/atmosphere'
       - '../atmosphere-ansible:/opt/dev/atmosphere-ansible'
@@ -24,6 +25,7 @@ services:
 
   troposphere:
     image: 'cyverse/troposphere:latest'
+    command: '' # put your user id here if running locally
     volumes:
       - '../troposphere:/opt/dev/troposphere'
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
