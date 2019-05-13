@@ -1,0 +1,17 @@
+---
+version: '3'
+
+services:
+
+  postgres:
+    image: 'postgres:9.6'
+    environment:
+      POSTGRES_USER: 'troposphere_db_user'
+      POSTGRES_PASSWORD: 'troposphere_db_pass'
+      POSTGRES_DB: 'troposphere_db'
+
+  troposphere:
+    image: 'calvinmclean/troposphere:latest'
+    entrypoint: '/root/test.sh'
+    depends_on:
+      - 'postgres'

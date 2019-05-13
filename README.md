@@ -7,19 +7,20 @@ Entire Atmosphere development environment in Docker Containers using Docker-Comp
     - Alternatively, modify the docker-compose file to point to your local repositories with either relative or absolute paths
 
 
-2. `docker-compose build` to build all containers. This step will take a while the first time it is run, but will be quicker after that
+2. `docker-compose pull` to pull all containers
     - To populate with an existing database, copy the `.sql` file to the `postgres` directory before building
 
 
 3. Clone the `atmosphere-docker-secrets` repository in the same directory as this repository (not inside this repository directory)
     - Checkout branch with the correct variables for your environment
-    - Change `MOCK_USER` variable in `atmosphere.ini` and `troposphere.ini` to your username if using 'local' variables
+    - Use the script `mock_user.sh <your_cyverse_username>` to change `MOCK_USER` variable in `atmosphere.ini` and `troposphere.ini` to your username if using 'local' variables branch
 
 
 4. `docker-compose up` to start all containers (use the `-d` option to run containers in the background)
     - The container's entrypoint will automatically read a variable from the `env` file in `atmosphere-docker-secrets` to determine if running a production or development environment
     - If you are using a local development version and want Guacamole also, replace the `docker-compose` part of all commands with: `docker-compose -f docker-compose.yml -f docker-compose.guac.yml`
     - If using local development version:
+      - **IMPORTANT**: If you are using Linux and want to maintain ownership of your local repositories, edit the `command` lines in `docker-compose.yml` with your user id (use `id -u` to get this). User ID `1000` is the default
       - Your containers should be ready when you see `webpack: Compiled successfully.` from Troposphere and `Starting Django Python...` from Atmosphere
       - Access Atmosphere in your browser at `localhost`
       - Troposphere and Atmosphere changes will be automatically built

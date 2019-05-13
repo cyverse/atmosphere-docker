@@ -4,8 +4,9 @@ version: '3'
 services:
 
   postgres:
-    build:
-      context: './postgres'
+    image: 'postgres:9.6'
+    volumes:
+      - './postgres:/docker-entrypoint-initdb.d'
     environment:
       POSTGRES_USER: 'atmo_app'
       POSTGRES_PASSWORD: 'atmosphere'
@@ -13,8 +14,8 @@ services:
       TROPO_DB_NAME: 'troposphere'
 
   atmosphere:
-    build:
-      context: './atmosphere'
+    image: 'cyverse/atmosphere:latest'
+    command: '' # put your user id here if running locally
     volumes:
       - '../atmosphere:/opt/dev/atmosphere'
       - '../atmosphere-ansible:/opt/dev/atmosphere-ansible'
@@ -23,8 +24,8 @@ services:
       - 'postgres'
 
   troposphere:
-    build:
-      context: './troposphere'
+    image: 'cyverse/troposphere:latest'
+    command: '' # put your user id here if running locally
     volumes:
       - '../troposphere:/opt/dev/troposphere'
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
