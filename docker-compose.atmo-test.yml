@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: 'atmosphere_db_pass'
 
   atmosphere:
-    image: 'calvinmclean/atmosphere:latest'
+    image: 'cyverse/atmosphere:latest'
     entrypoint: '/root/test.sh'
     depends_on:
       - 'postgres'

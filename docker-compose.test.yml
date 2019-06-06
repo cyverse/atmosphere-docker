@@ -13,12 +13,12 @@ services:
       TROPO_DB_NAME: 'troposphere'
 
   atmosphere:
-    image: 'calvinmclean/atmosphere:latest'
+    image: 'cyverse/atmosphere:latest'
     depends_on:
       - 'postgres'
 
   troposphere:
-    image: 'calvinmclean/troposphere:latest'
+    image: 'cyverse/troposphere:latest'
     depends_on:
       - 'atmosphere'
     ports:
