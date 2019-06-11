@@ -20,6 +20,8 @@ services:
       - '../atmosphere:/opt/dev/atmosphere'
       - '../atmosphere-ansible:/opt/dev/atmosphere-ansible'
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
+      - '/boot:/boot'
+      - '/lib/modules:/lib/modules'
     depends_on:
       - 'postgres'
 

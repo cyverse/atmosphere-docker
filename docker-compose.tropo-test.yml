@@ -11,7 +11,7 @@ services:
       POSTGRES_DB: 'troposphere_db'
 
   troposphere:
-    image: 'calvinmclean/troposphere:latest'
+    image: 'cyverse/troposphere:latest'
     entrypoint: '/root/test.sh'
     depends_on:
       - 'postgres'
