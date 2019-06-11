@@ -1,0 +1,33 @@
+---
+version: '3'
+
+services:
+
+  postgres:
+    image: 'postgres:9.6'
+    volumes:
+      - './postgres:/docker-entrypoint-initdb.d'
+    environment:
+      POSTGRES_USER: 'atmo_app'
+      POSTGRES_PASSWORD: 'atmosphere'
+      POSTGRES_DB: 'atmo_prod'
+      TROPO_DB_NAME: 'troposphere'
+
+  atmosphere:
+    image: 'cyverse/atmosphere:latest'
+    volumes:
+      - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
+      - '/boot:/boot'
+      - '/lib/modules:/lib/modules'
+    depends_on:
+      - 'postgres'
+
+  troposphere:
+    image: 'cyverse/troposphere:latest'
+    volumes:
+      - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
+    depends_on:
+      - 'atmosphere'
+    ports:
+      - '443:443'
+      - '80:80'
