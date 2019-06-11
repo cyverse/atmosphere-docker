@@ -4,8 +4,9 @@ version: '3'
 services:
 
   postgres:
-    build:
-      context: './postgres'
+    image: 'postgres:9.6'
+    volumes:
+      - './postgres:/docker-entrypoint-initdb.d'
     environment:
       POSTGRES_USER: 'atmo_app'
       POSTGRES_PASSWORD: 'atmosphere'
@@ -14,21 +15,19 @@ services:
 
   atmosphere:
     image: 'cyverse/atmosphere:latest'
+    volumes:
+      - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
+      - '/boot:/boot'
+      - '/lib/modules:/lib/modules'
     depends_on:
       - 'postgres'
 
   troposphere:
     image: 'cyverse/troposphere:latest'
+    volumes:
+      - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
     depends_on:
       - 'atmosphere'
     ports:
       - '443:443'
       - '80:80'
-
-  tester:
-    build:
-      context: './tester'
-    entrypoint: 'sleep 300 && /test.sh'
-    depends_on:
-      - 'atmosphere'
-      - 'troposphere'
