@@ -4,7 +4,7 @@ services:
   - docker
 
 env:
-  - GUAC_ARG='-f docker-compose.yml -f docker-compose.guac.yml' ATMO_TEST_ARG='-f docker-compose.atmo-test.yml' TROPO_TEST_ARG='-f docker-compose.tropo-test.yml'
+  - GUAC_ARG='-f docker-compose.yml -f docker-compose.guac.yml' ATMO_TEST_ARG='-f tests/docker-compose.atmo-test.yml' TROPO_TEST_ARG='-f tests/docker-compose.tropo-test.yml'
 
 before_install:
   - sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -18,7 +18,6 @@ script:
   - docker-compose ${GUAC_ARG} config
   - docker-compose ${ATMO_TEST_ARG} config
   - docker-compose ${TROPO_TEST_ARG} config
-  - docker-compose build
   - docker-compose ${ATMO_TEST_ARG} up --exit-code-from atmosphere
   - docker-compose ${ATMO_TEST_ARG} rm -f
   - docker-compose ${TROPO_TEST_ARG} up --exit-code-from troposphere
