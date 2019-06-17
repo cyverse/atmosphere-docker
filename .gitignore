@@ -1,4 +1,5 @@
 atmo-local/
 logs/
 *.sql
+*.dump
 secrets.env
