@@ -8,7 +8,8 @@ Entire Atmosphere development environment in Docker Containers using Docker-Comp
 
 
 2. `docker-compose pull` to pull all containers
-    - To populate with an existing database, copy the `.sql` file to the `postgres` directory before building
+    - To populate with an existing Atmosphere database, copy the `*.sql` file to the `postgres` directory
+    - To populate with a Troposphere database, copy the `tropo*.sql.dump` file to the `postgres` directory. If the file is a `*.sql` file, the postgres image will attempt to dump it into the Atmosphere database instead of the Troposphere database
 
 
 3. Clone the `atmosphere-docker-secrets` repository in the same directory as this repository (not inside this repository directory)
