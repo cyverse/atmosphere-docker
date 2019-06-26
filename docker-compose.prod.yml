@@ -31,3 +31,13 @@ services:
     ports:
       - '443:443'
       - '80:80'
+
+  sanitarysql:
+    build: './sanitarysql'
+    volumes:
+      - '../atmosphere-docker-secrets/ssh:/root/.ssh'
+      - './sanitarysql/data:/root/data'
+    ports:
+      - '1234:22'
+    env_file:
+      - '../atmosphere-docker-secrets/env'
