@@ -12,6 +12,7 @@ services:
       POSTGRES_PASSWORD: 'atmosphere'
       POSTGRES_DB: 'atmo_prod'
       TROPO_DB_NAME: 'troposphere'
+    network_mode: 'host'
 
   atmosphere:
     image: 'cyverse/atmosphere:latest'
@@ -24,6 +25,7 @@ services:
       - '/lib/modules:/lib/modules'
     depends_on:
       - 'postgres'
+    network_mode: 'host'
 
   troposphere:
     image: 'cyverse/troposphere:latest'
@@ -36,3 +38,4 @@ services:
     ports:
       - '443:443'
       - '80:80'
+    network_mode: 'host'
