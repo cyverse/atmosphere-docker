@@ -28,7 +28,7 @@ services:
     depends_on:
       - 'postgres'
     extra_hosts:
-      - 'postgres:172.17.0.1'
+      - 'postgres:${dockerhost}'
 
 
   troposphere:
@@ -43,4 +43,4 @@ services:
       - '443:443'
       - '80:80'
     extra_hosts:
-      - 'postgres:172.17.0.1'
+      - 'postgres:${dockerhost}'
