@@ -9,7 +9,8 @@ services:
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
       - '/boot:/boot'
       - '/lib/modules:/lib/modules'
-    network_mode: 'host'
+    extra_hosts:
+      - 'postgres:172.17.0.1'
 
   troposphere:
     image: 'cyverse/troposphere:latest'
@@ -20,4 +21,5 @@ services:
     ports:
       - '443:443'
       - '80:80'
-    network_mode: 'host'
+    extra_hosts:
+      - 'postgres:172.17.0.1'
