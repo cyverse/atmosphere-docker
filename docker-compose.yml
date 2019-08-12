@@ -16,6 +16,14 @@ services:
       - '5432:5432'
     network_mode: 'host'
 
+  celery:
+    build: './celery'
+    command: '' # put your user id here if running locally
+    environment:
+      env_type: "dev"
+    volumes:
+      - '../atmosphere:/opt/dev/atmosphere'
+
   atmosphere:
     image: 'cyverse/atmosphere:latest'
     command: '' # put your user id here if running locally
@@ -27,9 +35,9 @@ services:
       - '/lib/modules:/lib/modules'
     depends_on:
       - 'postgres'
+      - 'celery'
     extra_hosts:
       - 'postgres:${dockerhost}'
-
 
   troposphere:
     image: 'cyverse/troposphere:latest'

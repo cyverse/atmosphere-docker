@@ -3,9 +3,17 @@ version: '3'
 
 services:
 
+  celery:
+    build: './celery'
+    environment:
+      env_type: "prod"
+    volumes:
+      - 'atmo:/opt/dev/atmosphere'
+
   atmosphere:
     image: 'cyverse/atmosphere:latest'
     volumes:
+      - 'atmo:/opt/dev/atmosphere'
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
       - '/boot:/boot'
       - '/lib/modules:/lib/modules'
@@ -23,3 +31,6 @@ services:
       - '80:80'
     extra_hosts:
       - 'postgres:${dockerhost}'
+
+volumes:
+  atmo:
