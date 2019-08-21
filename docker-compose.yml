@@ -27,6 +27,7 @@ services:
     volumes:
       - '../atmosphere:/opt/dev/atmosphere'
       - '../atmosphere-ansible:/opt/dev/atmosphere-ansible'
+      - 'atmo-env:/opt/env'
     depends_on:
       - 'redis'
     extra_hosts:
@@ -41,6 +42,7 @@ services:
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
       - '/boot:/boot'
       - '/lib/modules:/lib/modules'
+      - 'atmo-env:/opt/env'
     depends_on:
       - 'postgres'
       - 'celery'
@@ -60,3 +62,6 @@ services:
       - '80:80'
     extra_hosts:
       - 'postgres:${dockerhost}'
+
+volumes:
+  atmo-env:

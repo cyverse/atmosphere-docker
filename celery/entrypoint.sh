@@ -16,13 +16,11 @@ then
   sed -i "s/^CELERYD_GROUP=\"www-data\"$/CELERYD_GROUP=\"$user_id\"/" /etc/init.d/celeryd
   sed -i "s/^CELERY_USER=\"www-data\"$/CELERY_USER=\"user\"/" /etc/init.d/celerybeat
   sed -i "s/^CELERY_GROUP=\"www-data\"$/CELERY_GROUP=\"$user_id\"/" /etc/init.d/celerybeat
-  chown -R $user_id:$user_id /opt/dev/atmosphere
-else
-  chown -R www-data:www-data /opt/dev/atmosphere
 fi
 
+mkdir -p /var/log/celery
 
-service celerybeat start
-service celeryd start
+/etc/init.d/celerybeat start
+/etc/init.d/celeryd start
 
 tail -f /var/log/celery/*.log
