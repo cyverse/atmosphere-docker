@@ -3,6 +3,9 @@ version: '3'
 
 services:
 
+  redis:
+    image: 'redis:latest'
+
   postgres:
     image: 'postgres:9.6'
     volumes:
@@ -23,6 +26,11 @@ services:
       env_type: "dev"
     volumes:
       - '../atmosphere:/opt/dev/atmosphere'
+      - '../atmosphere-ansible:/opt/dev/atmosphere-ansible'
+    depends_on:
+      - 'redis'
+    extra_hosts:
+      - 'postgres:${dockerhost}'
 
   atmosphere:
     image: 'cyverse/atmosphere:latest'

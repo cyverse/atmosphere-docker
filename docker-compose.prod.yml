@@ -3,17 +3,24 @@ version: '3'
 
 services:
 
+  redis:
+    image: 'redis:latest'
+
   celery:
     build: './celery'
-    environment:
-      env_type: "prod"
     volumes:
       - 'atmo:/opt/dev/atmosphere'
+      - 'atmo-ansible:/opt/dev/atmosphere-ansible'
+    depends_on:
+      - 'redis'
+    extra_hosts:
+      - 'postgres:${dockerhost}'
 
   atmosphere:
     image: 'cyverse/atmosphere:latest'
     volumes:
       - 'atmo:/opt/dev/atmosphere'
+      - 'atmo-ansible:/opt/dev/atmosphere-ansible'
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
       - '/boot:/boot'
       - '/lib/modules:/lib/modules'
@@ -34,3 +41,4 @@ services:
 
 volumes:
   atmo:
+  atmo-ansible:
