@@ -23,6 +23,8 @@ services:
       - '../atmosphere:/opt/dev/atmosphere'
       - '../atmosphere-ansible:/opt/dev/atmosphere-ansible'
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
+      - './logs/atmosphere:/opt/dev/atmosphere/logs'
+      - './logs/celery:/var/log/celery'
       - '/boot:/boot'
       - '/lib/modules:/lib/modules'
     depends_on:
@@ -37,6 +39,7 @@ services:
     volumes:
       - '../troposphere:/opt/dev/troposphere'
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
+      - './logs/troposphere:/opt/dev/troposphere/logs'
     depends_on:
       - 'atmosphere'
     ports:
