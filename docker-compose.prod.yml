@@ -7,6 +7,8 @@ services:
     image: 'cyverse/atmosphere:v36-4'
     volumes:
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
+      - './logs/atmosphere:/opt/dev/atmosphere/logs'
+      - './logs/celery:/var/log/celery'
       - '/boot:/boot'
       - '/lib/modules:/lib/modules'
     extra_hosts:
@@ -16,6 +18,7 @@ services:
     image: 'cyverse/troposphere:v36-4'
     volumes:
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
+      - './logs/troposphere:/opt/dev/troposphere/logs'
     depends_on:
       - 'atmosphere'
     ports:
