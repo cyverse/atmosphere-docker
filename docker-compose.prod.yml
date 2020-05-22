@@ -4,7 +4,7 @@ version: '3'
 services:
 
   atmosphere:
-    image: 'cyverse/atmosphere:v36-6'
+    image: 'cyverse/atmosphere:release-v36-7'
     volumes:
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
       - './logs/atmosphere:/opt/dev/atmosphere/logs'
@@ -15,7 +15,7 @@ services:
       - 'postgres:${dockerhost}'
 
   troposphere:
-    image: 'cyverse/troposphere:v36-4'
+    image: 'cyverse/troposphere:release-v36-6'
     volumes:
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
       - './logs/troposphere:/opt/dev/troposphere/logs'
