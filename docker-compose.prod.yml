@@ -4,7 +4,7 @@ version: '3'
 services:
 
   atmosphere:
-    image: 'cyverse/atmosphere:release-v36-7'
+    image: 'cyverse/atmosphere:release-v36-9'
     volumes:
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
       - './logs/atmosphere:/opt/dev/atmosphere/logs'
