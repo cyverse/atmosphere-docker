@@ -30,8 +30,9 @@ services:
     depends_on:
       - 'postgres'
     extra_hosts:
-      - 'postgres:${dockerhost}'
-
+      - 'atmosphere:127.0.0.1'
+      - 'postgres:127.0.0.1'
+    network_mode: 'host'
 
   troposphere:
     image: 'cyverse/troposphere:latest'
@@ -42,8 +43,7 @@ services:
       - './logs/troposphere:/opt/dev/troposphere/logs'
     depends_on:
       - 'atmosphere'
-    ports:
-      - '443:443'
-      - '80:80'
     extra_hosts:
-      - 'postgres:${dockerhost}'
+      - 'atmosphere:127.0.0.1'
+      - 'postgres:127.0.0.1'
+    network_mode: 'host'
