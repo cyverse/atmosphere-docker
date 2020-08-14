@@ -4,13 +4,15 @@ version: '3'
 services:
 
   atmosphere:
-    image: 'cyverse/atmosphere:release-v36-9'
+    image: 'cyverse/atmosphere:release-v37-0'
     volumes:
       - '../atmosphere-docker-secrets:/opt/dev/atmosphere-docker-secrets'
       - './logs/atmosphere:/opt/dev/atmosphere/logs'
       - './logs/celery:/var/log/celery'
       - '/boot:/boot'
       - '/lib/modules:/lib/modules'
+
+      - '../atmosphere-argo:/opt/dev/atmosphere-argo'
     extra_hosts:
       - 'atmosphere:127.0.0.1'
       - 'postgres:127.0.0.1'
