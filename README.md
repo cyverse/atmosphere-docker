@@ -1,3 +1,5 @@
+# THIS REPOSITORY IS READONLY AND NO LONGER ACTIVE
+
 # Atmosphere Docker
 Entire Atmosphere development environment in Docker Containers using Docker-Compose.
 
